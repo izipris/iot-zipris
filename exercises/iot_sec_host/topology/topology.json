@@ -11,15 +11,20 @@
                            "arp -i eth0 -s 10.0.3.30 08:00:00:00:03:00"]},
         "noniot": {"ip": "10.0.4.4/24", "mac": "08:00:00:00:04:44",
                "commands":["route add default gw 10.0.4.40 dev eth0",
-                           "arp -i eth0 -s 10.0.4.40 08:00:00:00:04:00"]}
+                           "arp -i eth0 -s 10.0.4.40 08:00:00:00:04:00"]},
+        "dst1": {"ip": "10.0.5.5/24", "mac": "08:00:00:00:05:55",
+               "commands":["route add default gw 10.0.5.50 dev eth0",
+                           "arp -i eth0 -s 10.0.5.50 08:00:00:00:05:00"]}
     },
     "switches": {
         "r1": { "runtime_json" : "r1-runtime.json" },
         "s1": { "runtime_json" : "s1-runtime.json" },
-        "s2": { "runtime_json" : "s2-runtime.json" }
+        "s2": { "runtime_json" : "s2-runtime.json" },
+        "s3": { "runtime_json" : "s3-runtime.json" }
     },
     "links": [
         ["wlm", "s1-p1"], ["iot1", "s2-p1"], ["s1-p2", "r1-p1"],
-        ["iot2", "s2-p2"], ["noniot", "s2-p3"], ["s2-p4", "r1-p2"]
+        ["iot2", "s2-p2"], ["noniot", "s2-p3"], ["s2-p4", "r1-p2"],
+        ["dst1", "s3-p1"], ["s3-p2", "r1-p3"]
     ]
 }
