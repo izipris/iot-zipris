@@ -35,6 +35,28 @@
         "dstAddr": "00:00:00:00:03:00",
         "port": 3
       }
+    },
+    {
+      "table": "MyIngress.dscp_exact",
+      "match": {
+        "hdr.ipv4.diffserv": 1
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:01:00",
+        "port": 1
+      }
+    },
+    {
+      "table": "MyIngress.dscp_exact",
+      "match": {
+        "hdr.ipv4.diffserv": 2
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:01:00",
+        "port": 1
+      }
     }
   ]
 }
