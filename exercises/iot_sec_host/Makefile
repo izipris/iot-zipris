@@ -16,7 +16,7 @@ run:
 	$(P4C) switch.p4 --p4runtime-files build/switch.p4info.txt -o build/switch.json
 	$(P4C) router.p4 --p4runtime-files build/router.p4info.txt -o build/router.json
 	$(P4C) security_switch.p4 --p4runtime-files build/security_switch.p4info.txt -o build/security_switch.json
-	sudo python $(RUN_SCRIPT) -t $(TOPO) $(run_args)
+	sudo python $(RUN_SCRIPT) -t $(TOPO) -b $(BMV2_SWITCH_EXE)
 
 stop:
 	sudo mn -c
