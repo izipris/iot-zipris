@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import sys
 
-from scapy.all import sniff, get_if_list
-from scapy.all import sendp, send, hexdump, get_if_list, get_if_hwaddr
-from scapy.layers.inet import Ether, IP, UDP, TCP
+from scapy.all import sendp, get_if_list
+from scapy.all import sniff
+from scapy.layers.inet import IP
+
 from exercises.iot_sec_host.security_switch.cache_loader import *
 
 IFACE = 'eth0'
@@ -83,8 +84,6 @@ def handle_pkt(pkt):
 
 
 if __name__ == '__main__':
-    pkt = Ether(src="ff:ff:ff:ff:ff:ff", dst="ff:ff:ff:ff:ff:ff") / IP(dst='10.0.5.5', tos=4) / TCP() / 'test'
-    handle_pkt(pkt)
     print('Sniffing on %s' % IFACE)
     sys.stdout.flush()
     sniff(iface=IFACE, prn=lambda x: handle_pkt(x))
