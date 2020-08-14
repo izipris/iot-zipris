@@ -18,10 +18,11 @@ def action_iot(pkt, dscp_value):
         acl_list = mud_file['ietf-access-control-list:acls']['acl']
         for acl in acl_list:
             for ace in acl['aces']['ace']:
-                allowed_domain = ace['matches']['ipv4']['ietf-acldns:src-dnsname']
-                ip_addr = get_ip_by_domain(allowed_domain)
-                if pkt[IP].dst == ip_addr:
-                    action_iot_passed(pkt)
+                if 'ietf-acldns:dst-dnsname' in ace['matches']['ipv4']:
+                    allowed_domain = ace['matches']['ipv4']['ietf-acldns:dst-dnsname']
+                    ip_addr = get_ip_by_domain(allowed_domain)
+                    if pkt[IP].dst == ip_addr:
+                        action_iot_passed(pkt)
         action_iot_failed(pkt)
 
 
