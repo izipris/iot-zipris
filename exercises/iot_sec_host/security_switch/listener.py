@@ -4,12 +4,21 @@ import sys
 from scapy.all import sendp, get_if_list
 from scapy.all import sniff
 from scapy.layers.inet import IP
+import json
 
-from exercises.iot_sec_host.security_switch.cache_loader import *
+CACHE_FILE_DNS = './security_switch/cache/dns_cache.json'
+CACHE_FILE_MUD = './security_switch/cache/mud_cache.json'
+
+
+def load_json_file(file_path):
+    with open(file_path) as file:
+        data = json.load(file)
+    return data
+
 
 IFACE = 'eth0'
-CACHE_DNS = load_cache_dns()
-CACHE_MUD = load_cache_mud()
+CACHE_DNS = load_json_file(CACHE_FILE_DNS)
+CACHE_MUD = load_json_file(CACHE_FILE_MUD)
 
 
 def action_iot(pkt, dscp_value):
