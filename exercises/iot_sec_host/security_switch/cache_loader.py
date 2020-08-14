@@ -1,7 +1,7 @@
 import json
 
-CACHE_FILE_DNS = './cache/dns_cache.json'
-CACHE_FILE_MUD = './cache/mud_cache.json'
+CACHE_FILE_DNS = './security_switch/cache/dns_cache.json'
+CACHE_FILE_MUD = './security_switch/cache/mud_cache.json'
 
 
 def load_cache_dns():
