@@ -1,4 +1,8 @@
 {
-  "dscp_value": 1,
-  "mud_file": ""
+  "entities": [
+    {
+      "dscp_value": 1,
+      "mud_file": "./mud/zipris-iot.json"
+    }
+  ]
 }
