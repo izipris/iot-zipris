@@ -1,16 +1,16 @@
 {
   "target": "bmv2",
-  "p4info": "build/source_routing.p4info",
-  "bmv2_json": "build/source_routing.json",
+  "p4info": "build/switch.p4info.txt",
+  "bmv2_json": "build/switch.json",
   "table_entries": [
     {
       "table": "MyIngress.ipv4_lpm",
       "match": {
-        "hdr.ipv4.dstAddr": ["10.0.3.5", 32]
+        "hdr.ipv4.dstAddr": ["10.0.5.5", 32]
       },
       "action_name": "MyIngress.ipv4_forward",
       "action_params": {
-        "dstAddr": "00:00:00:00:03:05",
+        "dstAddr": "00:00:00:00:05:05",
         "port": 1
       }
     },
