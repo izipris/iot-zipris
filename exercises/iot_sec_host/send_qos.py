@@ -27,13 +27,14 @@ def main():
     parser.add_argument("--des", help="IP address of the destination", type=str)
     parser.add_argument("--m", help="Raw Message", type=str)
     parser.add_argument("--dur", help="in seconds", type=str)
+    parser.add_argument("--tos", help="in seconds", type=int)
     args = parser.parse_args()
 
     if args.p and args.des and args.m and args.dur:
         addr = socket.gethostbyname(args.des)
         iface = get_if()
         if args.p == 'UDP':
-            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=1) / UDP(dport=4321, sport=1234) / args.m
+            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=args.tos) / UDP(dport=4321, sport=1234) / args.m
             pkt.show2()
             try:
                 for i in range(int(args.dur)):
@@ -42,7 +43,7 @@ def main():
             except KeyboardInterrupt:
                 raise
         elif args.p == 'TCP':
-            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=1) / TCP() / args.m
+            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=args.tos / TCP() / args.m
             pkt.show2()
             try:
                 for i in range(int(args.dur)):
