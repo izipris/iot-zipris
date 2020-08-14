@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 
 from scapy.all import sniff, get_if_list

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import json
 
 CACHE_FILE_DNS = './security_switch/cache/dns_cache.json'
