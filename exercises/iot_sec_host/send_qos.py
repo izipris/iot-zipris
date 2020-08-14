@@ -43,7 +43,7 @@ def main():
             except KeyboardInterrupt:
                 raise
         elif args.p == 'TCP':
-            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=args.tos / TCP() / args.m
+            pkt = Ether(src=get_if_hwaddr(iface), dst="ff:ff:ff:ff:ff:ff") / IP(dst=addr, tos=args.tos) / TCP() / args.m
             pkt.show2()
             try:
                 for i in range(int(args.dur)):
