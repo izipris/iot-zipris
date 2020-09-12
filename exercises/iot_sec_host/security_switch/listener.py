@@ -21,11 +21,23 @@ def load_json_file(file_path):
 
 IFACE = 'eth0'
 DSCP_NON_IOT = 0
+ARGS_COUNT = 2
+ARGS_HOST_IDX = 1
+EXIT_CODE_ERROR = 1
+ERROR_USAGE = 'Usage: python listener.py <host name>'
 
 CACHE_DNS = load_json_file(CACHE_FILE_DNS)
 CACHE_MUD = load_json_file(CACHE_FILE_MUD)
 CACHE_CLIENTS = load_json_file(CACHE_FILE_CLIENTS)
 CACHE_CONNECTION = []
+
+
+def parse_arguments():
+    global host_name
+    if len(sys.argv) != ARGS_COUNT:
+        print(ERROR_USAGE)
+        quit(EXIT_CODE_ERROR)
+    host_name = sys.argv[ARGS_HOST_IDX]
 
 
 def is_iot_client(connection):
@@ -84,10 +96,9 @@ def tos_to_dscp_value(tos):
 
 
 def get_if():
-    ifs = get_if_list()
     captured_iface = None
     for i in get_if_list():
-        if IFACE in i:
+        if host_name + '-' + IFACE in i:
             captured_iface = i
             break
     if not captured_iface:
@@ -106,6 +117,6 @@ def handle_pkt(pkt):
 
 
 if __name__ == '__main__':
-    print('Sniffing on %s' % IFACE)
+    print('Sniffing on %s' % host_name + '-' + IFACE)
     sys.stdout.flush()
-    sniff(iface=IFACE, prn=lambda x: handle_pkt(x))
+    sniff(iface=host_name + '-' + IFACE, prn=lambda x: handle_pkt(x))
