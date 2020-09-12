@@ -1,7 +1,8 @@
 {
   "entities": [
     {
-      "dscp_value": 1,
+      "ip": "10.0.0.2",
+      "dscp_value": 4,
       "mud_file": "./security_switch/cache/mud/zipris-iot.json"
     }
   ]
