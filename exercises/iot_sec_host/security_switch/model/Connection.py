@@ -12,3 +12,6 @@ class Connection:
 
     def get_dscp_value(self):
         return self.__dscp_value
+
+    def get_tuple(self):
+        return self.__ip_src, self.__ip_dst, self.__dscp_value
