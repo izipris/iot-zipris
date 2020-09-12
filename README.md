@@ -1,15 +1,15 @@
 # iot-zipris
 
-##Overview
+## Overview
 
 
-##Prerequisites
+## Prerequisites
 <ul>
 <li>Setup a Mininet environment on a VM (<a href="http://mininet.org/download/">see instructions</a>). If you're using Windows on your local machine, consider working with <a href="https://www.youtube.com/watch?v=YLAYfwUPj7s">PuTTY & Xming</a> in order to enable <i>xterm</i> usage in Mininet</li>
 <li>Setup HPE VAN SDN Controller on a separated VM (<a href="https://www.youtube.com/watch?v=_xWwKLjZ4Ig&list=PLsYGHuNuBZcZIso_OSGv_CjaMQREMHpIA&index=1">see videos</a>).</li>
 </ul>
 
-##Setup
+## Setup
 1. Bring up the VMs of Mininet and the SDN controller.
 2. Clone this project to the Mininet VM and browse to the `iot-zipris` directory.
 3. Bring up Mininet with the project's topology, OF 1.3 switches and the HPE VAN SDN Controller:
@@ -21,7 +21,7 @@
 2. Enable port-mirroring in the main router, so traffic from the home network will be mirrored to the 'security SmartNIC': `exercises/iot_sec_host/infrastructure/payloads/request_router_port_mirroring.json`
 3. Enable DSCP marking on the home network switch: `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_iot_dscp.json` <b>or</b> `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_non-iot_dscp.json`
 
-##Usage
+## Usage
 The project's topology enables the following hosts:
 1. `h1` - the security SmartNIC of the ISP
 2. `h2` - an IoT device in the home network
