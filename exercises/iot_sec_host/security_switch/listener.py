@@ -1,13 +1,16 @@
 #!/usr/bin/env python
+import json
 import sys
 
-from scapy.all import sendp, get_if_list
+from scapy.all import get_if_list
 from scapy.all import sniff
 from scapy.layers.inet import IP
-import json
+
+from exercises.iot_sec_host.security_switch.model.Connection import Connection
 
 CACHE_FILE_DNS = './security_switch/cache/dns_cache.json'
 CACHE_FILE_MUD = './security_switch/cache/mud_cache.json'
+CACHE_FILE_CLIENTS = './security_switch/cache/clients_cache.json'
 
 
 def load_json_file(file_path):
@@ -17,12 +20,26 @@ def load_json_file(file_path):
 
 
 IFACE = 'eth0'
+DSCP_NON_IOT = 0
+
 CACHE_DNS = load_json_file(CACHE_FILE_DNS)
 CACHE_MUD = load_json_file(CACHE_FILE_MUD)
+CACHE_CLIENTS = load_json_file(CACHE_FILE_CLIENTS)
+CACHE_CONNECTION = []
 
 
-def action_iot(pkt, dscp_value):
-    mud_file = get_mud_from_cache(dscp_value)
+def is_iot_client(connection):
+    if connection.get_dscp_value() == DSCP_NON_IOT:
+        return False
+    for entity in CACHE_CLIENTS['entities']:
+        if entity['ip'] == connection.get_ip_src() and entity['dscp_value'] == connection.get_dscp_value:
+            return True
+    return False
+
+
+def action_iot(connection):
+    connection_verified = False
+    mud_file = get_mud_from_cache(connection.get_ip_src(), connection.get_dscp_value())
     if mud_file is not None:
         acl_list = mud_file['ietf-access-control-list:acls']['acl']
         for acl in acl_list:
@@ -30,30 +47,27 @@ def action_iot(pkt, dscp_value):
                 if 'ietf-acldns:dst-dnsname' in ace['matches']['ipv4']:
                     allowed_domain = ace['matches']['ipv4']['ietf-acldns:dst-dnsname']
                     ip_addr = get_ip_by_domain(allowed_domain)
-                    if pkt[IP].dst == ip_addr:
-                        action_iot_passed(pkt)
-        action_iot_failed(pkt)
+                    if connection.get_ip_dst() == ip_addr:
+                        connection_verified = True
+                        break
+            if connection_verified:
+                break
+        if not connection_verified:
+            action_block_connection(connection)
+    add_to_connections_cache(connection)
 
 
-def action_noniot(pkt):
-    pass
+def add_to_connections_cache(connection):
+    CACHE_CONNECTION.append(connection.get_tuple())
 
 
-def action_iot_passed(pkt):
-    pkt[IP].tos = 0
-    try:
-        sendp(pkt, iface=get_if())
-    except KeyboardInterrupt:
-        raise
+def action_block_connection(connection):
+    print('SHOULD BE BLOCKED')
 
 
-def action_iot_failed(pkt):
-    pass
-
-
-def get_mud_from_cache(dscp_value):
+def get_mud_from_cache(ip, dscp_value):
     for entity in CACHE_MUD['entities']:
-        if entity['dscp_value'] == dscp_value:
+        if entity['ip'] == ip and entity['dscp_value'] == dscp_value:
             return load_json_file(entity['mud_file'])
     return None  # TODO: DSCP value is unknown, unidentified device
 
@@ -85,11 +99,9 @@ def get_if():
 def handle_pkt(pkt):
     print('got a packet')
     pkt.show2()
-    dscp_value = tos_to_dscp_value(pkt[IP].tos)
-    if dscp_value == 0:
-        action_noniot(pkt)
-    else:
-        action_iot(pkt, dscp_value)
+    connection = Connection(pkt[IP].src, pkt[IP].dst, pkt[IP].tos)
+    if is_iot_client(connection) and connection.get_tuple() not in CACHE_CONNECTION:
+        action_iot(connection)
     sys.stdout.flush()
 
 
