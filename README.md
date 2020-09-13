@@ -15,7 +15,7 @@
 2. Clone this project to the Mininet VM and browse to the `iot-zipris` directory.
 3. Bring up Mininet with the project's topology, OF 1.3 switches and the HPE VAN SDN Controller:
 
-`sudo mn --custom exercises/iot_sec_host/infrastructure/iot-zipris-topo.py --topo ziprisTopo --controller=remote,ip=<SDN Controller IP> --switch ovsk,protocols=OpenFlow13`
+`sudo mn --custom exercises/iot_sec_host/infrastructure/iot-zipris-topo.py --topo ziprisTopo --controller=remote,ip=<SDN Controller IP> --switch ovsk,protocols=OpenFlow13 --nat`
 
 You can execute in the Mininet terminal the command `pingall` to make sure that the topology established successfully.<br />
 <b>Note:</b> for simulating a realistic environment, post the following requests manually to the SDN controller:
