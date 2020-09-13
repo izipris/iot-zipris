@@ -17,6 +17,7 @@
 
 `sudo mn --custom exercises/iot_sec_host/infrastructure/iot-zipris-topo.py --topo ziprisTopo --controller=remote,ip=<SDN Controller IP> --switch ovsk,protocols=OpenFlow13`
 
+You can execute in the Mininet terminal the command `pingall` to make sure that the topology established successfully.<br />
 <b>Note:</b> for simulating a realistic environment, post the following requests manually to the SDN controller:
 1. Generate a token for the controller using the request in `exercises/iot_sec_host/infrastructure/payloads/request_auth.json`
 2. Enable port-mirroring in the main router, so traffic from the home network will be mirrored to the 'security SmartNIC': `exercises/iot_sec_host/infrastructure/payloads/request_router_port_mirroring.json`

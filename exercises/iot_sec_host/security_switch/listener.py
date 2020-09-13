@@ -137,9 +137,8 @@ def get_if():
 
 def handle_pkt(pkt):
     if IP in pkt:
-        print('got a packet')
-        pkt.show2()
         connection = Connection(pkt[IP].src, pkt[IP].dst, tos_to_dscp_value(pkt[IP].tos))
+        print('got a packet: ' + str(connection.get_tuple()))
         if is_iot_client(connection) and connection.get_tuple() not in CACHE_CONNECTION:
             print(str(connection.get_tuple()) + ' STARTED HANDLE')
             action_iot(connection)
