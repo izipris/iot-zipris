@@ -3,12 +3,17 @@
 import sys
 
 from scapy.all import sniff, get_if_list
+from scapy.layers.inet import IP
 
 # Constants
 ARGS_COUNT = 2
 ARGS_HOST_IDX = 1
 EXIT_CODE_ERROR = 1
 ERROR_USAGE = 'Usage: python receive_qos.py <host name>'
+
+
+def tos_to_dscp_value(tos):
+    return int(('{0:08b}'.format(tos))[:6], 2)
 
 
 def get_if():
@@ -24,9 +29,10 @@ def get_if():
 
 
 def handle_pkt(pkt):
-    print('got a packet')
-    pkt.show2()
-    sys.stdout.flush()
+    if IP in pkt:
+        connection = (pkt[IP].src, pkt[IP].dst, tos_to_dscp_value(pkt[IP].tos))
+        print('got a packet: ' + str(connection))
+        sys.stdout.flush()
 
 
 def parse_arguments():
