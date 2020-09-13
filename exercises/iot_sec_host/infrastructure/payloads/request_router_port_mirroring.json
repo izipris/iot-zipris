@@ -1,0 +1,23 @@
+{
+	"flow":{
+		"priority": 60001,
+		"match": [
+			{
+				"eth_type": "ipv4"
+			}
+		],
+		"instructions": [
+			{
+				"apply_actions": [
+					{
+						"output": 1
+					},
+					{
+						"output": "NORMAL"
+					}
+				]
+			}
+
+		]
+	}
+}

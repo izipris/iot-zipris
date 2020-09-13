@@ -1,0 +1,28 @@
+{
+	"flow":{
+		"priority": 60001,
+		"match": [
+			{
+				"eth_type": "ipv4"
+			},
+			{
+				"ipv4_src": "10.0.0.3"
+			}
+		],
+		"instructions": [
+			{
+				"apply_actions": [
+					{
+						"set_field": {
+							"ip_dscp": 0
+						}
+					},
+					{
+						"output": "NORMAL"
+					}
+				]
+			}
+
+		]
+	}
+}

@@ -2,6 +2,7 @@
 import json
 import sys
 
+import requests
 from scapy.all import get_if_list
 from scapy.all import sniff
 from scapy.layers.inet import IP
@@ -27,8 +28,50 @@ class Connection:
 
 
 class WebDriver:
-    def do_post(self, base_url, path, parameters, headers, body):
-        pass  # TODO: implement post request
+    @staticmethod
+    def do_post(base_url, path, headers, body):
+        url = base_url + path
+        return requests.post(url, data=body, headers=headers, verify=False)
+
+
+class SdnControllerWebDriver:
+    def __init__(self, base_url, auth_token):
+        self.__base_url = base_url
+        self.__auth_token = auth_token
+
+    def block_connection(self, connection):
+        ROUTER_ADDR = '00:00:00:00:00:00:00:01'
+        path = '/sdn/v2.0/of/datapaths/' + ROUTER_ADDR + '/flows'
+        headers = {'Content-Type': 'application/json', 'X-AUTH-TOKEN': self.__auth_token}
+        body = '''
+        {
+            "flow":{
+                "priority": 60002,
+                "match": [
+                    {
+                        "eth_type": "ipv4"
+                    },
+                    {
+                        "ipv4_src": "%s"
+                    },
+                    {
+                        "ipv4_dst": "%s"
+                    }
+                ],
+                "instructions": [
+                    {
+                        "apply_actions": [
+                            {
+                                "set_mpls_ttl": 0
+                            }
+                        ]
+                    }
+                    
+                ]
+            }
+        }
+        ''' % (connection.get_ip_src(), connection.get_ip_dst())
+        return WebDriver.do_post(self.__base_url, path, headers, body)
 
 
 CACHE_FILE_DNS = './security_switch/cache/dns_cache.json'
@@ -44,10 +87,12 @@ def load_json_file(file_path):
 
 IFACE = 'eth0'
 DSCP_NON_IOT = 0
-ARGS_COUNT = 2
+ARGS_COUNT = 4
 ARGS_HOST_IDX = 1
+ARGS_CTRL_IDX = 2
+ARGS_TOKEN_IDX = 3
 EXIT_CODE_ERROR = 1
-ERROR_USAGE = 'Usage: python listener.py <host name>'
+ERROR_USAGE = 'Usage: python listener.py <host name> <Controller base URL> <Controller auth token>'
 
 CACHE_DNS = load_json_file(CACHE_FILE_DNS)
 CACHE_MUD = load_json_file(CACHE_FILE_MUD)
@@ -56,11 +101,13 @@ CACHE_CONNECTION = []
 
 
 def parse_arguments():
-    global host_name
+    global host_name, controller_base_url, controller_auth_token
     if len(sys.argv) != ARGS_COUNT:
         print(ERROR_USAGE)
         quit(EXIT_CODE_ERROR)
     host_name = sys.argv[ARGS_HOST_IDX]
+    controller_base_url = sys.argv[ARGS_CTRL_IDX]
+    controller_auth_token = sys.argv[ARGS_TOKEN_IDX]
 
 
 def is_iot_client(connection):
@@ -102,7 +149,9 @@ def add_to_connections_cache(connection):
 
 
 def action_block_connection(connection):
-    print('SHOULD BE BLOCKED')  # TODO: send to controller block request
+    print('SHOULD BE BLOCKED')
+    sdn_controller_web_driver = SdnControllerWebDriver(controller_base_url, controller_auth_token)
+    sdn_controller_web_driver.block_connection(connection)
 
 
 def get_mud_from_cache(ip, dscp_value):
