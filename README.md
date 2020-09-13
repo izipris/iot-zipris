@@ -6,7 +6,8 @@
 ## Prerequisites
 <ul>
 <li>Setup a Mininet environment on a VM (<a href="http://mininet.org/download/">see instructions</a>). If you're using Windows on your local machine, consider working with <a href="https://www.youtube.com/watch?v=YLAYfwUPj7s">PuTTY & Xming</a> in order to enable <i>xterm</i> usage in Mininet</li>
-<li>Setup HPE VAN SDN Controller on a separated VM (<a href="https://www.youtube.com/watch?v=_xWwKLjZ4Ig&list=PLsYGHuNuBZcZIso_OSGv_CjaMQREMHpIA&index=1">see videos</a>).</li>
+<li>Setup HPE VAN SDN Controller on a separated VM (<a href="https://www.youtube.com/watch?v=_xWwKLjZ4Ig&list=PLsYGHuNuBZcZIso_OSGv_CjaMQREMHpIA&index=1">see videos</a>). <b>Note:</b> use Ubuntu 14.04.</li>
+<li>For both VMs, in the Network settings, set Adapter 1 as NAT and Adapter 2 as Host-only Adapter.</li>
 </ul>
 
 ## Setup
@@ -16,7 +17,7 @@
 
 `sudo mn --custom exercises/iot_sec_host/infrastructure/iot-zipris-topo.py --topo ziprisTopo --controller=remote,ip=<SDN Controller IP> --switch ovsk,protocols=OpenFlow13`
 
-<u>Note:</u> for simulating a realistic environment, post the following requests manually to the SDN controller:
+<b>Note:</b> for simulating a realistic environment, post the following requests manually to the SDN controller:
 1. Generate a token for the controller using the request in `exercises/iot_sec_host/infrastructure/payloads/request_auth.json`
 2. Enable port-mirroring in the main router, so traffic from the home network will be mirrored to the 'security SmartNIC': `exercises/iot_sec_host/infrastructure/payloads/request_router_port_mirroring.json`
 3. Enable DSCP marking on the home network switch: `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_iot_dscp.json` <b>or</b> `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_non-iot_dscp.json`
