@@ -21,15 +21,18 @@ You can execute in the Mininet terminal the command `pingall` to make sure that 
 <b>Note:</b> for simulating a realistic environment, post the following requests manually to the SDN controller:
 1. Generate a token for the controller using the request in `exercises/iot_sec_host/infrastructure/payloads/request_auth.json`
 2. Enable port-mirroring in the main router, so traffic from the home network will be mirrored to the 'security SmartNIC': `exercises/iot_sec_host/infrastructure/payloads/request_router_port_mirroring.json`
-3. Enable DSCP marking on the home network switch: `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_iot_dscp.json` <b>or</b> `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_non-iot_dscp.json`
+3. Enable DSCP marking on the home network switches: `exercises/iot_sec_host/infrastructure/payloads/request_switch_mark_iot_dscp.json`
 
 ## Usage
 The project's topology enables the following hosts:
 1. `h1` - the security SmartNIC of the ISP
-2. `h2` - an IoT device in the home network
-3. `h4` - a non-IoT device in the home network
+2. `h2` - an IoT device in the home network  #1
+3. `h4` - a non-IoT device in the home network #1
 4. `h5` - a valid destination of `h2`
 5. `h6` - an invalid destination of `h2`
+6. `h7` - an IoT device in the home network #2
+7. `h8` - a valid destination of `h7`
+8. `h9` - an invalid destination of `h7`
 
 After bringing up the project's Mininet topology, use `xterm <host name>` in order to control the hosts.<br />
 On `h1`, browse `iot-zipris/exercises/iot_sec_host` and execute `python security_switch/listener.py h1` in order to monitor the traffic to `h1` and enable packets classification solution.<br />
