@@ -3,6 +3,10 @@
     {
       "domain": "zipris.co.il",
       "ip": "10.0.0.4"
+    },
+    {
+      "domain": "test.co.il",
+      "ip": "10.0.0.7"
     }
   ]
 }

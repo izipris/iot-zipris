@@ -4,6 +4,11 @@
       "ip": "10.0.0.2",
       "dscp_value": 4,
       "mud_file": "./security_switch/cache/mud/zipris-iot.json"
+    },
+    {
+      "ip": "10.0.0.6",
+      "dscp_value": 6,
+      "mud_file": "./security_switch/cache/mud/test-iot.json"
     }
   ]
 }
